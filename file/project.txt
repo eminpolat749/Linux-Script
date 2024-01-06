@@ -1,0 +1,78 @@
+#!/bin/bash
+
+generate_fibonacci() {
+	read -p "enter the number of terms in the fibonacci sequence: " n
+	a=0
+	b=1
+	echo "fibonacci sequence:"
+	for ((i=0; i<n; i++)); do
+	echo -n "$a"
+	temp=$((a+b))
+	a=$b
+	b=$temp
+    done
+    echo
+}
+
+backup_directory() {
+	echo "enter the file name to backup:"
+	read source_directory
+	backup_folder="backups"
+	mkdir -p "$backup_folder"
+	backup_filename="$backup_folder/backup.tgz"
+	tar -czvf "$backup_filename" "$source_directory"
+	echo "proccess is done -> backupfile: $backup_filename"
+}	
+	
+	
+
+
+find_replace_in_file() {
+	read -p "enter the filename: " filename
+	read -p "enter the search string: " search_str
+	read -p "enter replacement string: " replace_str
+	sed -i "s/$search_str/$replace_str/g" "$filename"
+	echo "find and replace operation completed successfully."
+}
+
+print_system_info() {
+	echo "current date and time: $(date)"
+	echo "operating system information: $(uname -a)"
+}
+
+count_string_in_file() {
+	read -p "enter the filename: " filename
+	read -p "enter the string to count: " search_str
+	count=$(grep -o "$search_str" "$filename" | wc -l)
+	echo "frequency of $search_str in $filename: $count"
+}
+
+count_files_with_extension() {
+	read -p "enter the directory path: " dir_path
+	read -p "enter the file extension: " file_extension
+	count=$(find "$dir_path" -type f -name "*.$file_extension" | wc -l)
+	echo "number of .$file_extension files in $dir_path: $count"
+}
+
+while true; do
+	echo "1- generate fibonacci sequence"
+	echo "2- directory backup"
+	echo "3- find and replace in a file"
+	echo "4- print system information"
+	echo "5- count a string in a file"
+	echo "6- count files with a specific extension"
+	echo "7- exit"
+	
+	read -p "enter your choice(1-7): " choice
+
+	case $choice in
+		1) generate_fibonacci ;;
+		2) backup_directory ;;
+		3) find_replace_in_file ;;
+		4) print_system_info ;;
+		5) count_string_in_file ;;
+		6) count_files_with_extension ;;
+		7) echo "exiting the script. goodbye"; exit ;;
+		*) echo "invalid choice. please enter a number between 1 and 7."
+	esac
+done
